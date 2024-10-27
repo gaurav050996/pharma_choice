@@ -1,0 +1,14 @@
+<!-- inventory/templates/inventory/add_drug.html -->
+{% extends "inventory/base.html" %}
+{% block title %}Add New Drug{% endblock %}
+
+{% block content %}
+<h2>Add New Drug</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <p>Don’t see the category you need? <a href="{% url 'add_category' %}">Add a new category</a></p>
+    <button type="submit">Add Drug</button>
+</form>
+<a href="{% url 'admin_dashboard' %}">Cancel</a>
+{% endblock %}

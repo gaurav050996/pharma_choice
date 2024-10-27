@@ -27,17 +27,22 @@ class Drug(models.Model):
 class Stock(models.Model):
     stock_id = models.AutoField(primary_key=True)
     drug = models.OneToOneField(Drug, on_delete=models.CASCADE)
-    available_stock = models.PositiveIntegerField()
+    available_stock = models.PositiveIntegerField(default=0)
     stock_updated_on = models.DateTimeField(auto_now=True)
     stock_status = models.BooleanField(default=True)
 
-    def update_stock(self, quantity):
-        self.available_stock -= quantity
+    def save(self, *args, **kwargs):
+        # Update stock status based on availability
         self.stock_status = self.available_stock > 0
+        super().save(*args, **kwargs)
+
+    def update_stock(self, quantity):
+        # Update available stock and stock status
+        self.available_stock -= quantity
         self.save()
 
     def __str__(self):
-        return f"{self.drug.drug_name} - Stock: {self.available_stock}"
+        return f"{self.drug.drug_name} - Stock: {self.available_stock} - Status: {'In Stock' if self.stock_status else 'Out of Stock'}"
 
 class UserOrder(models.Model):
     order_id = models.AutoField(primary_key=True)

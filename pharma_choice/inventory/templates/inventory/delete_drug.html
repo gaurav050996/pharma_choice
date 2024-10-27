@@ -1,0 +1,13 @@
+<!-- inventory/templates/inventory/delete_drug.html -->
+{% extends "inventory/base.html" %}
+{% block title %}Delete Drug{% endblock %}
+
+{% block content %}
+<h2>Are you sure you want to delete this drug?</h2>
+<p>{{ drug.drug_name }}</p>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Yes, delete</button>
+    <a href="{% url 'admin_dashboard' %}">Cancel</a>
+</form>
+{% endblock %}

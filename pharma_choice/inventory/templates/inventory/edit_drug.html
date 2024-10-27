@@ -1,0 +1,13 @@
+<!-- inventory/templates/inventory/edit_drug.html -->
+{% extends "inventory/base.html" %}
+{% block title %}Edit Drug{% endblock %}
+
+{% block content %}
+<h2>Edit Drug</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save Changes</button>
+</form>
+<a href="{% url 'admin_dashboard' %}">Cancel</a>
+{% endblock %}

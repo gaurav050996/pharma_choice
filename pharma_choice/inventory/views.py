@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import render, get_object_or_404,redirect
+
+from .forms import DrugForm, CategoryForm
 from .models import Drug, Stock, Category, UserOrder
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import UserPassesTestMixin
@@ -49,3 +51,46 @@ def admin_dashboard(request):
 
 def order_success(request):
     return render(request, 'inventory/order_success.html')
+
+def edit_drug(request, drug_id):
+    drug = get_object_or_404(Drug, pk=drug_id)
+    if request.method == 'POST':
+        form = DrugForm(request.POST, instance=drug)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Drug updated successfully!")
+            return redirect('admin_dashboard')
+    else:
+        form = DrugForm(instance=drug, initial={'available_stock': drug.stock.available_stock})
+    return render(request, 'inventory/edit_drug.html', {'form': form})
+
+def delete_drug(request, drug_id):
+    drug = get_object_or_404(Drug, pk=drug_id)
+    if request.method == 'POST':
+        drug.delete()
+        messages.success(request, "Drug deleted successfully!")
+        return redirect('admin_dashboard')
+    return render(request, 'inventory/delete_drug.html', {'drug': drug})
+
+
+def add_drug(request):
+    if request.method == 'POST':
+        form = DrugForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "New drug added successfully!")
+            return redirect('admin_dashboard')
+    else:
+        form = DrugForm()
+    return render(request, 'inventory/add_drug.html', {'form': form})
+
+def add_category(request):
+    if request.method == 'POST':
+        form = CategoryForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "New category added successfully!")
+            return redirect('add_drug')  # Redirect back to the add drug page
+    else:
+        form = CategoryForm()
+    return render(request, 'inventory/add_category.html', {'form': form})

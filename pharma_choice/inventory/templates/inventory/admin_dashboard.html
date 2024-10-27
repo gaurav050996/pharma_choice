@@ -4,6 +4,8 @@
 
 {% block content %}
 <h2>Admin Dashboard</h2>
+<a href="{% url 'add_drug' %}" class="button">Add New Drug</a>
+<a href="{% url 'add_category' %}" class="button">Add New Category</a>
 <table>
     <thead>
         <tr>
@@ -29,7 +31,10 @@
             <td>{{ drug.price_after_discount }}</td>
             <td>{{ drug.stock.available_stock }}</td>
             <td>{{ drug.stock.stock_status|yesno:"In Stock,Out of Stock" }}</td>
-            <td><button>Edit</button> <button>Delete</button></td>
+            <td>
+                <a href="{% url 'edit_drug' drug.drug_id %}">Edit</a> |
+                <a href="{% url 'delete_drug' drug.drug_id %}">Delete</a>
+            </td>
         </tr>
         {% endfor %}
     </tbody>
