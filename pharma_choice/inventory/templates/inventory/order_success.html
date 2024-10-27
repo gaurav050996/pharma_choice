@@ -1,0 +1,9 @@
+<!-- inventory/templates/inventory/order_success.html -->
+{% extends "inventory/base.html" %}
+{% block title %}Order Success{% endblock %}
+
+{% block content %}
+<h2>Order Placed Successfully!</h2>
+<p>Your order has been placed. You will receive an email confirmation shortly.</p>
+<a href="{% url 'drug_list' %}">Back to Shop</a>
+{% endblock %}

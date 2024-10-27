@@ -1,0 +1,37 @@
+<!-- inventory/templates/inventory/admin_dashboard.html -->
+{% extends "inventory/base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<h2>Admin Dashboard</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Drug ID</th>
+            <th>Drug Name</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Discount</th>
+            <th>Price After Discount</th>
+            <th>Available Stock</th>
+            <th>Stock Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for drug in drugs %}
+        <tr>
+            <td>{{ drug.drug_id }}</td>
+            <td>{{ drug.drug_name }}</td>
+            <td>{{ drug.category.category_name }}</td>
+            <td>{{ drug.price }}</td>
+            <td>{{ drug.discount }}%</td>
+            <td>{{ drug.price_after_discount }}</td>
+            <td>{{ drug.stock.available_stock }}</td>
+            <td>{{ drug.stock.stock_status|yesno:"In Stock,Out of Stock" }}</td>
+            <td><button>Edit</button> <button>Delete</button></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
