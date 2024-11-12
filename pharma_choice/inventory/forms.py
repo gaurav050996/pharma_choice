@@ -1,6 +1,8 @@
 # inventory/forms.py
 from django import forms
 from .models import Drug, Stock, Category
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
 
 class DrugForm(forms.ModelForm):
     available_stock = forms.IntegerField(label="Initial Stock Quantity", min_value=0)
@@ -25,3 +27,31 @@ class CategoryForm(forms.ModelForm):
     class Meta:
         model = Category
         fields = ['category_name']
+
+
+class CustomUserCreationForm(UserCreationForm):
+    email = forms.EmailField(required=True)
+    ROLE_CHOICES = [
+        ('user', 'User'),
+        ('admin', 'Admin'),
+    ]
+    role = forms.ChoiceField(choices=ROLE_CHOICES, required=True)
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password1', 'password2', 'role']
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.email = self.cleaned_data['email']
+
+        # Set is_staff based on role
+        role = self.cleaned_data['role']
+        if role == 'admin':
+            user.is_staff = True
+        else:
+            user.is_staff = False
+
+        if commit:
+            user.save()
+        return user
