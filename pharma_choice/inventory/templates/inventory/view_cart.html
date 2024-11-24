@@ -1,0 +1,75 @@
+{% extends "inventory/base.html" %}
+{% load cart_tags %}
+{% block content %}
+<style>
+    h2 {
+        text-align: center;
+        color: #333;
+        margin-top: 20px;
+    }
+    table {
+        width: 80%;
+        margin: 20px auto;
+        border-collapse: collapse;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+    th {
+        background-color: #f4f4f4;
+    }
+    tr {
+        background-color: #efefef;
+    }
+    .empty-cart, .cart-buttons {
+        text-align: center;
+        margin-top: 20px;
+    }
+    .cart-button {
+        padding: 10px 15px;
+        margin: 5px;
+        background-color: #4CAF50; /* Green for proceed actions */
+        color: white;
+        border: none;
+        border-radius: 5px;
+        text-decoration: none;
+        display: inline-block;
+    }
+    .cart-button:hover {
+        background-color: #45a049;
+    }
+    .back-button {
+        background-color: #f58634; /* Orange for back/navigation actions */
+    }
+    .back-button:hover {
+        background-color: #e57228;
+    }
+</style>
+
+<h2>Your Cart</h2>
+{% if cart.items.all %}
+    <table>
+        <tr>
+            <th>Item</th>
+            <th>Quantity</th>
+            <th>Total (after discount)</th>
+        </tr>
+        {% for item in cart.items.all %}
+        <tr>
+            <td>{{ item.drug.drug_name }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>₹{{ item.quantity|multiply:item.drug.price_after_discount|floatformat:2 }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <div class="cart-buttons">
+        <a href="{% url 'drug_list' %}" class="cart-button back-button">Continue Shopping</a>
+        <a href="{% url 'checkout' %}" class="cart-button">Proceed to Checkout</a>
+    </div>
+{% else %}
+    <p class="empty-cart">Your cart is empty.</p>
+    <a href="{% url 'drug_list' %}" class="cart-button back-button">Back to Shop</a>
+{% endif %}
+{% endblock %}

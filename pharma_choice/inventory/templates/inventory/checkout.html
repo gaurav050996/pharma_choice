@@ -1,0 +1,103 @@
+{% extends "inventory/base.html" %}
+{% block title %}Checkout{% endblock %}
+{% block content %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+    }
+    h2 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 20px;
+    }
+    table {
+        width: 80%;
+        margin: 0 auto 20px auto;
+        border-collapse: collapse;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    table th, table td {
+        border: 1px solid #ddd;
+        padding: 12px 15px;
+        text-align: center;
+    }
+    table th {
+        background-color: #343a40; /* Dark header background */
+        color: #fff;
+        font-size: 1.1em;
+    }
+    table td {
+        background-color: #f9f9f9;
+    }
+    table tbody tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+    p {
+        text-align: center;
+        font-size: 1.2em;
+        color: #555;
+    }
+    p strong {
+        font-size: 1.4em;
+        color: #343a40; /* Dark color for the total amount */
+    }
+    form {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+    form button {
+        background-color: #343a40; /* Dark button background */
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        font-size: 1em;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    form button:hover {
+        background-color: #495057; /* Slightly lighter dark hover */
+    }
+    a {
+        display: inline-block;
+        margin-top: 20px;
+        text-align: center;
+        color: #343a40; /* Dark link color */
+        text-decoration: none;
+        font-size: 1em;
+        transition: color 0.3s ease;
+    }
+    a:hover {
+        color: #495057; /* Slightly lighter dark hover */
+    }
+</style>
+
+<h2>Checkout</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Item</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in cart.items.all %}
+        <tr>
+            <td>{{ item.drug.drug_name }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>₹{{ item.drug.price_after_discount }}</td>
+             <td>{{ item.quantity|add:"0" }} × ₹{{ item.drug.price_after_discount }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<p><strong>Total Amount: ₹{{ total_amount }}</strong></p>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Confirm Order</button>
+</form>
+<a href="{% url 'cart' %}">Back to Cart</a>
+{% endblock %}

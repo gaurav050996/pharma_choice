@@ -1,0 +1,83 @@
+{% extends "inventory/base.html" %}
+{% block title %}Order History{% endblock %}
+{% block content %}
+<style>
+    h2 {
+        text-align: center;
+        color: #343a40;
+        margin-bottom: 20px;
+    }
+    .order-history {
+        width: 80%;
+        margin: 0 auto;
+        padding: 20px;
+        border-radius: 10px;
+        background-color: #f9f9f9;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .order {
+        border-bottom: 1px solid #ddd;
+        padding: 15px 0;
+    }
+    .order:last-child {
+        border-bottom: none;
+    }
+    .order h3 {
+        color: #343a40;
+    }
+    .order-details table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+    }
+    .order-details table th, .order-details table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+    .order-details table th {
+        background-color: #343a40;
+        color: white;
+    }
+    .order-total {
+        text-align: right;
+        font-weight: bold;
+        color: #343a40;
+    }
+</style>
+
+<h2>Order History</h2>
+<div class="order-history">
+    {% for order in orders %}
+    <div class="order">
+        <h3>Order ID: {{ order.id }}</h3>
+        <p>Order Date: {{ order.order_date }}</p>
+        <div class="order-details">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in order.items.all %}
+                    <tr>
+                        <td>{{ item.drug.drug_name }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>₹{{ item.price }}</td>
+                        <td>₹{{ item.quantity|floatformat:2|add:"0" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <p class="order-total">Total Amount: ₹{{ order.total_amount }}</p>
+    </div>
+    {% empty %}
+    <p>No orders found.</p>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -3,9 +3,37 @@
 
 {% block content %}
 <style>
+        .search-container {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        margin: 0 auto;
+    }
+    .search-container input[type="text"] {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+        font-size: 1rem;
+    }
+    .search-container button {
+        padding: 10px 20px;
+        background-color: #f58634;
+        color: white;
+        border: none;
+        font-size: 1rem;
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    .search-container button:hover {
+        background-color: #e57228;
+    }
     .filter-form {
         display: grid;
-        grid-template-columns: 2fr 1fr 1fr; /* Allocating space for search, dropdown, and button */
+        grid-template-columns: 2fr 1fr; /* Allocating space for search and dropdown */
         grid-gap: 10px;
         padding-bottom: 20px;
     }
@@ -44,25 +72,43 @@
         border-radius: 5px;
         padding: 10px;
         cursor: pointer;
-        margin-top: 10px;
+        margin-top: 5px;
     }
     button:hover {
         background-color: #e57228;
     }
+    <style>
+    .no-results {
+        text-align: center;
+        color: #555;
+        font-size: 1.5rem;
+        margin-top: 20px;
+        padding: 20px;
+        background-color: #f8f9fa;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+</style>
 </style>
 
 <h2>Available Drugs</h2>
-<form method="get" action="." class="filter-form">
-    <input type="text" name="search" placeholder="Search for drugs...">
-    <select name="category">
+<form class="filter-form">
+    <div class="search-container">
+        <input type="text" id="search-input" name="search" placeholder="Search for drugs..." value="{{ search_query }}">
+        <button type="button" id="search-button">Search</button>
+    </div>
+    <select id="category-select" name="category">
         <option value="">All Categories</option>
         {% for category in categories %}
-        <option value="{{ category.category_id }}">{{ category.category_name }}</option>
+        <option value="{{ category.category_id }}" {% if category.category_id|stringformat:"s" == selected_category|stringformat:"s" %}selected{% endif %}>
+            {{ category.category_name }}
+        </option>
         {% endfor %}
     </select>
-    <button type="submit">Filter</button>
 </form>
 
+{% if drugs %}
 <div class="drug-grid">
     {% for drug in drugs %}
     <div class="drug-card">
@@ -71,13 +117,52 @@
         <p>Original Price: ₹{{ drug.price }}</p>
         <p>Discounted Price: ₹{{ drug.price_after_discount }}</p>
         <p>Available Stock: {{ drug.stock.available_stock }}</p>
-        <form method="post" action="{% url 'order_drug' drug.drug_id %}">
+        <form method="post" action="{% url 'add_to_cart' drug.drug_id %}">
             {% csrf_token %}
-            <label>Quantity:</label>
-            <input type="number" name="quantity" min="1" max="{{ drug.stock.available_stock }}" required>
-            <button type="submit">Order Now</button>
+            <label for="quantity-{{ drug.drug_id }}">Quantity:</label>
+            <input type="number" id="quantity-{{ drug.drug_id }}" name="quantity" min="1" max="{{ drug.stock.available_stock }}" required>
+            <button type="submit">Add to Cart</button>
         </form>
     </div>
     {% endfor %}
 </div>
+{% else %}
+<p class="no-results">No drugs found matching your criteria.</p>
+{% endif %}
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const searchButton = document.getElementById('search-button');
+        const searchInput = document.getElementById('search-input');
+        const categorySelect = document.getElementById('category-select');
+
+        function applyFilters() {
+            const searchQuery = searchInput.value.trim();
+            const category = categorySelect.value;
+
+            const params = new URLSearchParams();
+            if (searchQuery) params.append('search', searchQuery);
+            if (category) params.append('category', category);
+
+            const url = `${window.location.pathname}?${params.toString()}`;
+            window.location.href = url;
+        }
+
+        searchButton.addEventListener('click', () => {
+            applyFilters();
+        });
+
+        searchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                applyFilters();
+            }
+        });
+
+        categorySelect.addEventListener('change', () => {
+            applyFilters();
+        });
+    });
+</script>
 {% endblock %}
