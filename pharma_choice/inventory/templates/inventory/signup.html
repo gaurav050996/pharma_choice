@@ -1,13 +1,86 @@
-<!-- inventory/templates/inventory/signup.html -->
 {% extends "inventory/base.html" %}
 {% block title %}Sign Up{% endblock %}
 
 {% block content %}
-<h2>Sign Up</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Sign Up</button>
-</form>
-<p>Already have an account? <a href="{% url 'login' %}">Login here</a></p>
+<style>
+    .signup-container {
+        max-width: 400px;
+        margin: 100px auto;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.9);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        text-align: left;
+    }
+    form {
+        display: flex;
+        flex-direction: column;
+    }
+    .form-group {
+        margin-bottom: 10px;
+    }
+    label {
+        display: block;
+        margin-bottom: 5px;
+    }
+    input[type="text"], input[type="password"], input[type="email"], input[type="submit"] {
+        width: calc(100% - 20px); /* Adjust width to account for padding */
+        padding: 10px;
+        margin-bottom: 8px;
+        border: 2px solid #ff7e5f;
+        border-radius: 5px;
+        outline: none;
+        box-sizing: border-box; /* Include padding and border in the element's total width */
+    }
+    input[type="text"]:focus, input[type="password"]:focus, input[type="email"]:focus {
+        border-color: #feb47b;
+        box-shadow: 0 0 8px 0 rgba(254, 180, 123, 0.5);
+    }
+    button {
+        width: calc(100% - 20px); /* Same width adjustment as inputs */
+        background-color: #f58634;
+        color: white;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        margin-top: 10px;
+    }
+    button:hover {
+        background-color: #e57228;
+    }
+    .errorlist {
+        color: red;
+        font-size: 0.8em;
+        margin-top: -5px;
+        margin-bottom: 5px;
+    }
+    a {
+        color: #ff7e5f;
+        text-decoration: none;
+    }
+    a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<div class="signup-container">
+    <h2>Sign Up</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        {% for field in form %}
+            <div class="form-group">
+                {{ field.label_tag }}
+                {{ field }}
+                {% for error in field.errors %}
+                    <div class="errorlist">{{ error }}</div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+        <button type="submit">Sign Up</button>
+    </form>
+    <p>Already have an account? <a href="{% url 'login' %}">Login here</a></p>
+</div>
 {% endblock %}

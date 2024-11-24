@@ -1,10 +1,58 @@
-<!-- inventory/templates/inventory/drug_list.html -->
 {% extends "inventory/base.html" %}
 {% block title %}Drug Shop{% endblock %}
 
 {% block content %}
+<style>
+    .filter-form {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr; /* Allocating space for search, dropdown, and button */
+        grid-gap: 10px;
+        padding-bottom: 20px;
+    }
+    .drug-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Responsive grid layout */
+        grid-gap: 20px; /* Space between cards */
+        padding: 20px;
+    }
+    .drug-card {
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+    form {
+        margin-top: 10px;
+    }
+    input[type="text"], select, input[type="number"] {
+        width: 100%;
+        padding: 8px;
+        margin-top: 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box; /* Fixes overflow issue */
+    }
+    input[type="number"] {
+        max-width: 100px; /* Limiting width of quantity input to prevent overflow */
+    }
+    button {
+        background-color: #f58634;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 10px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+    button:hover {
+        background-color: #e57228;
+    }
+</style>
+
 <h2>Available Drugs</h2>
-<form method="get" action=".">
+<form method="get" action="." class="filter-form">
     <input type="text" name="search" placeholder="Search for drugs...">
     <select name="category">
         <option value="">All Categories</option>
@@ -20,8 +68,8 @@
     <div class="drug-card">
         <h3>{{ drug.drug_name }}</h3>
         <p>Category: {{ drug.category.category_name }}</p>
-        <p>Original Price: ${{ drug.price }}</p>
-        <p>Discounted Price: ${{ drug.price_after_discount }}</p>
+        <p>Original Price: ₹{{ drug.price }}</p>
+        <p>Discounted Price: ₹{{ drug.price_after_discount }}</p>
         <p>Available Stock: {{ drug.stock.available_stock }}</p>
         <form method="post" action="{% url 'order_drug' drug.drug_id %}">
             {% csrf_token %}

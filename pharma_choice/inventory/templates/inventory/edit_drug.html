@@ -1,8 +1,53 @@
-<!-- inventory/templates/inventory/edit_drug.html -->
 {% extends "inventory/base.html" %}
 {% block title %}Edit Drug{% endblock %}
 
 {% block content %}
+<style>
+    form {
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+        text-align: center;
+        color: #333;
+    }
+    input[type='text'], input[type='number'], select {
+        width: calc(100% - 20px);
+        padding: 10px;
+        margin-top: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+    button {
+        width: 100%;
+        padding: 10px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 20px;
+    }
+    button:hover {
+        background-color: #45a049;
+    }
+    a {
+        display: block;
+        text-align: center;
+        margin-top: 20px;
+        color: #007BFF;
+        text-decoration: none;
+    }
+    a:hover {
+        text-decoration: underline;
+    }
+</style>
+
 <h2>Edit Drug</h2>
 <form method="post">
     {% csrf_token %}

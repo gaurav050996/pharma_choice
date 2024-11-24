@@ -1,13 +1,69 @@
-<!-- inventory/templates/inventory/login.html -->
 {% extends "inventory/base.html" %}
+
 {% block title %}Login{% endblock %}
 
 {% block content %}
-<h2>Login</h2>
-<form method="post" action="{% url 'login' %}">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Login</button>
-</form>
-<p>Don’t have an account? <a href="{% url 'signup' %}">Sign up here</a></p>
+<style>
+    body {
+        background: linear-gradient(to right, #ff7e5f, #feb47b); /* Fallback for older browsers */
+        background: -webkit-linear-gradient(to right, #ff7e5f, #feb47b); /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(to right, #ff7e5f, #feb47b); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        font-family: Arial, sans-serif;
+        color: #333;
+    }
+    .login-container {
+        max-width: 400px;
+        margin: 100px auto;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        text-align: center;
+    }
+    form {
+        display: flex;
+        flex-direction: column;
+    }
+    input[type="text"], input[type="password"], input[type="email"] {
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 2px solid #ff7e5f; /* Border color */
+        border-radius: 5px;
+        outline: none; /* Removes the outline */
+    }
+    input[type="text"]:focus, input[type="password"]:focus, input[type="email"]:focus {
+        border-color: #feb47b; /* Changes border color on focus */
+        box-shadow: 0 0 8px 0 rgba(254, 180, 123, 0.5); /* Adds a soft glow */
+    }
+    button {
+        background-color: #f58634; /* Orange button */
+        color: white;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        margin-top: 15px;
+    }
+    button:hover {
+        background-color: #e57228; /* Darker orange on hover */
+    }
+    a {
+        color: #ff7e5f; /* Link color inspired by gradient */
+        text-decoration: none;
+    }
+    a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<div class="login-container">
+    <h2>Login</h2>
+    <form method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Login</button>
+    </form>
+    <p>Don’t have an account? <a href="{% url 'signup' %}">Sign up here</a></p>
+</div>
 {% endblock %}

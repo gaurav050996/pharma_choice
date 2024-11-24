@@ -1,13 +1,61 @@
-<!-- inventory/templates/inventory/delete_drug.html -->
 {% extends "inventory/base.html" %}
 {% block title %}Delete Drug{% endblock %}
 
 {% block content %}
-<h2>Are you sure you want to delete this drug?</h2>
-<p>{{ drug.drug_name }}</p>
-<form method="post">
-    {% csrf_token %}
-    <button type="submit">Yes, delete</button>
+<style>
+    .delete-container {
+        max-width: 600px;
+        margin: 40px auto;
+        padding: 20px;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+    h2 {
+        color: #cc0000; /* Red color to signify danger */
+    }
+    p {
+        font-size: 1.2em;
+        font-weight: bold; /* Making the drug name bold */
+        margin: 20px 0;
+        color: #333; /* Dark color for visibility */
+    }
+    form {
+        display: inline-block; /* Inline display to align with the cancel link */
+    }
+    button {
+        padding: 10px 20px;
+        background-color: #cc0000; /* Red button for deletion action */
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    button:hover {
+        background-color: #a30000; /* Darker red on hover */
+    }
+    a {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #ccc; /* Neutral grey for cancel */
+        color: black;
+        text-decoration: none;
+        border-radius: 5px;
+        margin-left: 10px; /* Margin for spacing */
+    }
+    a:hover {
+        background-color: #bbb;
+    }
+</style>
+
+<div class="delete-container">
+    <h2>Are you sure you want to delete this drug?</h2>
+    <p>{{ drug.drug_name }}</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Yes, delete</button>
+    </form>
     <a href="{% url 'admin_dashboard' %}">Cancel</a>
-</form>
+</div>
 {% endblock %}

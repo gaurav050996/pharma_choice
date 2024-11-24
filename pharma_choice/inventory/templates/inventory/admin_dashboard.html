@@ -1,8 +1,48 @@
-<!-- inventory/templates/inventory/admin_dashboard.html -->
 {% extends "inventory/base.html" %}
 {% block title %}Admin Dashboard{% endblock %}
 
 {% block content %}
+<style>
+    .button {
+        display: inline-block;
+        padding: 10px 20px;
+        margin: 10px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        text-decoration: none;
+        transition: background-color 0.3s, transform 0.3s;
+    }
+    .button:hover {
+        background-color: #45a049;
+        transform: scale(1.05);
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+    tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+    a {
+        color: #0066cc;
+        text-decoration: none;
+    }
+    a:hover {
+        text-decoration: underline;
+    }
+</style>
+
 <h2>Admin Dashboard</h2>
 <a href="{% url 'add_drug' %}" class="button">Add New Drug</a>
 <a href="{% url 'add_category' %}" class="button">Add New Category</a>
@@ -26,9 +66,9 @@
             <td>{{ drug.drug_id }}</td>
             <td>{{ drug.drug_name }}</td>
             <td>{{ drug.category.category_name }}</td>
-            <td>{{ drug.price }}</td>
+            <td>₹{{ drug.price }}</td>
             <td>{{ drug.discount }}%</td>
-            <td>{{ drug.price_after_discount }}</td>
+            <td>₹{{ drug.price_after_discount }}</td>
             <td>{{ drug.stock.available_stock }}</td>
             <td>{{ drug.stock.stock_status|yesno:"In Stock,Out of Stock" }}</td>
             <td>
